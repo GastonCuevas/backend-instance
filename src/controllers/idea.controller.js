@@ -1,17 +1,18 @@
 let _ideaService = null;
 class IdeaController {
-    constructor({IdeaService}){
+    constructor({ IdeaService }) {
         _ideaService = IdeaService;
     }
 
-    async get(req, res){
+    async get(req, res) {
         const { ideaId } = req.params;
         const idea = await _ideaService.get(ideaId);
         return res.send(idea);
     }
 
-    async getAll(req, res){
-        const ideas = await _ideaService.getAll();
+    async getAll(req, res) {
+        const { pageSize, pageNumber } = req.query;
+        const ideas = await _ideaService.getAll(pageSize, pageNumber);
         return res.send(ideas);
     }
 
@@ -19,16 +20,16 @@ class IdeaController {
         const { body } = req;
         const createdIdea = await _ideaService.create(body);
         return res.status(201).send(createdIdea);
-      }
+    }
 
-    async update(req, res){
+    async update(req, res) {
         const { body } = req;
         const { ideaId } = req.params;
         const updatedIdea = await _ideaService.update(ideaId, body);
         return res.send(updatedIdea);
     }
 
-    async delete(req, res){
+    async delete(req, res) {
         const { ideaId } = req.params;
         const deletedIdea = await _ideaService.delete(ideaId);
         return res.send(deletedIdea);
@@ -40,13 +41,13 @@ class IdeaController {
         return res.send(ideas);
     }
 
-    async upvoteIdea(req, res){
+    async upvoteIdea(req, res) {
         const { ideaId } = req.params;
         const idea = await _ideaService.upvoteIdea(ideaId);
         return res.send(idea);
     }
 
-    async downvoteIdea(req, res){
+    async downvoteIdea(req, res) {
         const { ideaId } = req.params;
         const idea = await _ideaService.downvoteIdea(ideaId);
         return res.send(idea);
