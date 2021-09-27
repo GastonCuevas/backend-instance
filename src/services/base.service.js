@@ -19,6 +19,7 @@ class BaseService {
             error.message = "entity does'nt found";
             throw error;
         }
+
         return currentEntity;
     }
 
