@@ -12,7 +12,7 @@ class ErrorManager {
         if(!ideaId){
             const error = new Error();
             error.status = 400;
-            error.message = "UserId must be send";
+            error.message = "IdeaId must be send";
             throw error;
         }
     }

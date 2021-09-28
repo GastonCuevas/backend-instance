@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 mongoose
   .connect(MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    //useFindAndModify: false
   })
   .then(() => server.start())
   .catch(console.log);

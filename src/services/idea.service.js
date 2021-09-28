@@ -4,21 +4,40 @@ const { ErrorManager } = require('../errors');
 
 class IdeaService extends BaseService {
 
-    constructor({IdeaRepository}){
+    constructor({ IdeaRepository }) {
         super(IdeaRepository);
         _ideaRepository = IdeaRepository
     }
 
     async getUserIdeas(author) {
-        ErrorManager.validAuthor(author);
+
+        if (!author) {
+            const error = new Error();
+            error.status = 400;
+            error.message = "UserId must be send";
+            throw error;
+        }
+
         return await _ideaRepository.getUserIdeas(author);
     }
 
     async upvoteIdea(ideaId) {
-        ErrorManager.validIdea(ideaId);
+
+        if (!ideaId) {
+            const error = new Error();
+            error.status = 400;
+            error.message = "IdeaId must be send";
+            throw error;
+        }
 
         const idea = await _ideaRepository.get(ideaId);
-        ErrorManager.existIdea(idea);
+
+        if (!idea) {
+            const error = new Error();
+            error.status = 404;
+            error.message = "Idea does not exist";
+            throw error;
+        }
 
         idea.upvotes.push(true);
 
@@ -26,14 +45,26 @@ class IdeaService extends BaseService {
     }
 
     async downvoteIdea(ideaId) {
-        ErrorManager.validIdea(ideaId);
+
+        if (!ideaId) {
+            const error = new Error();
+            error.status = 400;
+            error.message = "IdeaId must be send";
+            throw error;
+        }
 
         const idea = await _ideaRepository.get(ideaId);
-        ErrorManager.existIdea(idea);
+
+        if (!idea) {
+            const error = new Error();
+            error.status = 404;
+            error.message = "Idea does not exist";
+            throw error;
+        }
 
         idea.downvotes.push(true);
 
-        return await _ideaRepository.update(ideaId, { upvotes: idea.downvotes });
+        return await _ideaRepository.update(ideaId, { downvotes: idea.downvotes });
     }
 }
 
